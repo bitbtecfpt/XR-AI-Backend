@@ -1,52 +1,86 @@
 # XR-AI-Backend Setup
 
-## Create python virtual environment
+## Setting Up the Python Virtual Environment
 
-``` sh
+To create a Python virtual environment, run the following command:
+
+```sh
 python3 -m venv .venv
 ```
 
-## Activate virtual environment
+### Activating the Virtual Environment
 
-### For Mac
+#### On macOS / Linux:
 
-``` sh
+```sh
 source .venv/bin/activate
 ```
 
-### For Window
+#### On Windows:
 
-``` sh
+```sh
 .venv\Scripts\activate
 ```
 
-## Install / update required package from file requirements.txt
-### Install
-``` sh
+## Installing / Updating Required Packages
+
+### Install Required Packages
+
+To install the required packages listed in the `requirements.txt` file, run:
+
+```sh
 pip install -r requirements.txt
 ```
-### Update
+
+### Update `requirements.txt`
+
+If you've added or updated any dependencies, you can update the `requirements.txt` file by running:
+
 ```sh
 pip freeze > requirements.txt
 ```
-## Run project
+
+## Running the Project
+
+To start the project locally, use the following command to launch the FastAPI application with Uvicorn:
+
 ```sh
 uvicorn app.main:app --reload
 ```
-# Project Structure
+
+This will run the server and automatically reload it for any code changes during development.
+
+---
+
+## Project Structure
+
+Here is the basic directory structure of the project:
+
 ```
 .  
 ├── app  
-│   ├── api         // các file api được đặt trong này  
-│   ├── core        // chứa file config load các biến env & function tạo/verify JWT access-token 
-│   ├── helpers     // các function hỗ trợ như login_manager, paging  
-│   ├── models      // Database model, tích hợp với alembic để auto generate migration  
-│   ├── schemas     // Pydantic Schema (custom request and response for api)  
-│   ├── services    // Chứa logic CRUD giao tiếp với DB  
-│   └── main.py     // cấu hình chính của toàn bộ project  
-├── .gitignore  
-├── env.example  
-├── logging.ini     // cấu hình logging  
-├── README.md  
-└── requirements.txt    // file chứa các thư viện để cài đặt qua pip install
+│   ├── api         # Contains all the API endpoints and routes  
+│   ├── core        # Contains core configuration files, including environment variable loading and JWT handling  
+│   ├── helpers     # Utility functions such as login manager, pagination logic  
+│   ├── models      # Database models, integrated with Alembic for automatic migrations  
+│   ├── schemas     # Pydantic schemas for request and response validation  
+│   ├── services    # CRUD operations and database interaction logic  
+│   └── main.py     # Main entry point for configuring and running the application  
+├── .gitignore      # Git ignore file to exclude unnecessary files from version control  
+├── env.example     # Example environment configuration file  
+├── logging.ini     # Logging configuration file  
+├── README.md       # Project documentation file  
+└── requirements.txt  # Contains a list of required Python packages  
 ```
+
+---
+
+## Additional Notes
+
+- Make sure to replace the values in the `.env` file based on your environment.
+- The `logging.ini` file can be customized to manage logs for different levels of the application.
+- If you are contributing to this project, please remember to update `requirements.txt` with any new dependencies.
+
+---
+
+Feel free to adjust any specific details according to your project's unique requirements or environment settings!
