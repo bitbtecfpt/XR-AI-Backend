@@ -1,7 +1,7 @@
 import openai
 
 from app.core.config import settings
-from app.helper.ChatHistoryFile import ChatHistoryFile
+from app.helper.chat_history_file import ChatHistoryFile
 from app.schemas.request.chat_bot_request import ChatBotRequest
 
 
