@@ -74,13 +74,3 @@ Here is the basic directory structure of the project:
 ```
 
 ---
-
-## Additional Notes
-
-- Make sure to replace the values in the `.env` file based on your environment.
-- The `logging.ini` file can be customized to manage logs for different levels of the application.
-- If you are contributing to this project, please remember to update `requirements.txt` with any new dependencies.
-
----
-
-Feel free to adjust any specific details according to your project's unique requirements or environment settings!
