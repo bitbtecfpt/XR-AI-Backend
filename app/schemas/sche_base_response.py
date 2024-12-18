@@ -13,7 +13,7 @@ class ResponseSchemaBase(BaseModel):
     code: str = "unknown"  # Mã code mặc định
     message: str = "Unknown error"  # Thông báo mặc định
 
-    def create_response(self, code: str, message: str) -> "ResponseSchemaBase":
+    def custom_response(self, code: str, message: str) -> "ResponseSchemaBase":
         """
         Tạo custom response với code và message.
 
