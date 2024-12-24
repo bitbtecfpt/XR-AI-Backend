@@ -13,6 +13,7 @@ from app.api.api_router import router
 # Import CORSMiddleware để xử lý Cross-Origin Resource Sharing (CORS)
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.model.models import create_tables
 # Import Custom Exception Handler
 from app.helper.exception_handler import CustomException, http_exception_handler
 
@@ -58,6 +59,7 @@ def get_application() -> FastAPI:
     return application
 
 
+create_tables()
 # Khởi tạo ứng dụng FastAPI bằng cách gọi hàm get_application()
 app = get_application()
 
