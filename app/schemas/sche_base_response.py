@@ -11,20 +11,22 @@ T = TypeVar("T")
 
 class ResponseSchemaBase(BaseModel):
     code: str = "unknown"  # Mã code mặc định
+    status: str = "Unknown"  # Trạng thái mặc định
     message: str = "Unknown error"  # Thông báo mặc định
 
-    def custom_response(self, code: str, message: str) -> "ResponseSchemaBase":
+    def custom_response(self, code: str, status: str, message: str) -> "ResponseSchemaBase":
         """
         Tạo custom response với code và message.
 
         Args:
             code (str): Mã code của response.
+            status (str): Trạng thái của response.
             message (str): Thông báo của response.
 
         Returns:
             ResponseSchemaBase: Instance mới với các giá trị đã được gán.
         """
-        return ResponseSchemaBase(code=code, message=message)
+        return ResponseSchemaBase(code=code, status=status, message=message)
 
 
 class DataResponse(ResponseSchemaBase, BaseModel, Generic[T]):
@@ -40,22 +42,24 @@ class DataResponse(ResponseSchemaBase, BaseModel, Generic[T]):
     class Config:
         arbitrary_types_allowed = True
 
-    def create_response(self, code: str, message: str, **data: T) -> "DataResponse[T]":
+    def custom_response(self, code: str, status: str, message: str, **data: T) -> "DataResponse[T]":
         """
         Tạo custom response với code, message và data.
 
         Args:
             code (str): Mã code của response.
+            status (str): Trạng thái của response.
             message (str): Thông báo của response.
             **data (T): Dữ liệu của response. (**..: thể hiện tham số bổ sung)
 
         Returns:
             DataResponse: Instance mới với các giá trị đã được gán.
         """
-        return DataResponse(code=code, message=message, data=data)
+        return DataResponse(code=code, status=status, message=message, data=data)
 
-    def success_response(self, data: T):
+    def success_response(self, data: Optional[T] = None):
         self.code = '000'
+        self.status = 'SUCCESS'
         self.message = 'Success'
         self.data = data
         return self
@@ -82,6 +86,7 @@ class PaginatedResponse(DataResponse[T]):
     def create_paginated_response(
             self,
             code: str,
+            status: str,
             message: str,
             data: T,
             current_page: int,
@@ -93,6 +98,7 @@ class PaginatedResponse(DataResponse[T]):
 
         Args:
             code (str): Mã code của response.
+            status (str): Trạng thái của response.
             message (str): Thông báo của response.
             data (T): Dữ liệu của response.
             current_page (int): Trang hiện tại.
@@ -103,6 +109,7 @@ class PaginatedResponse(DataResponse[T]):
             PaginatedResponse[T]: Instance của response phân trang.
         """
         self.code = code
+        self.status = status
         self.message = message
         self.data = data
         self.metadata = MetadataSchema(
@@ -133,6 +140,7 @@ class PaginatedResponse(DataResponse[T]):
         """
         return self.create_paginated_response(
             code="000",
+            status="SUCCESS",
             message="Success",
             data=data,
             current_page=current_page,

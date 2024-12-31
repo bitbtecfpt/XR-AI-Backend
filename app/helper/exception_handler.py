@@ -14,6 +14,14 @@ class ExceptionType(enum.Enum):
     MS_UNAVAILABLE = 500, '990', 'The system is under maintenance, please try again later.'
     MS_INVALID_API_PATH = 500, '991', 'The system is under maintenance, please try again later.'
     DATA_RESPONSE_MALFORMED = 500, '992', 'An error occurred, please contact admin!'
+    VALIDATION_ERROR = 400, '400', 'Validation error'
+    NOT_FOUND = 404, '404', 'Not found'
+    UNAUTHORIZED = 401, '401', 'Unauthorized'
+    FORBIDDEN = 403, '403', 'Forbidden'
+    SERVER_ERROR = 500, '500', 'An error occurred, please contact admin!'
+    BAD_REQUEST = 400, '400', 'Bad request'
+    NOT_IMPLEMENTED = 501, '501', 'Not implemented'
+    METHOD_NOT_ALLOWED = 405, '405', 'Method not allowed'
 
     # Phương thức __new__ tự động gán giá trị cho mỗi enum
     def __new__(cls, *args, **kwds):
@@ -33,14 +41,16 @@ class ExceptionType(enum.Enum):
 class CustomException(Exception):
     http_code: int  # Mã HTTP trả về
     code: str  # Mã lỗi hệ thống
+    status: str  # Trạng thái lỗi
     message: str  # Thông báo lỗi chi tiết
 
     # Phương thức khởi tạo exception, có thể truyền vào mã HTTP, mã lỗi, và thông báo lỗi
-    def __init__(self, http_code: int = None, code: str = None, message: str = None):
+    def __init__(self, exception_type: ExceptionType, message: str = None):
         # Nếu không truyền vào thì mặc định là 500 (Lỗi hệ thống)
-        self.http_code = http_code if http_code else 500
-        self.code = code if code else str(self.http_code)  # Mã lỗi mặc định bằng mã HTTP nếu không có
-        self.message = message  # Thông báo lỗi
+        self.http_code = exception_type.http_code
+        self.code = exception_type.code
+        self.status = exception_type.name
+        self.message = message if message else exception_type.message
 
 
 # Xử lý exception khi có lỗi xảy ra trong ứng dụng
@@ -48,7 +58,7 @@ async def http_exception_handler(request: Request, exc: CustomException):
     # Trả về phản hồi JSON với mã lỗi và thông báo chi tiết từ CustomException
     return JSONResponse(
         status_code=exc.http_code,  # Mã HTTP
-        content=jsonable_encoder(ResponseSchemaBase().custom_response(exc.code, exc.message))
+        content=jsonable_encoder(ResponseSchemaBase().custom_response(exc.code, exc.status, exc.message))
         # Chuyển đối tượng thành JSON
     )
 
@@ -58,7 +68,9 @@ async def validation_exception_handler(request, exc):
     # Trả về phản hồi với mã lỗi 400 (Bad Request) và thông báo lỗi từ quá trình validation
     return JSONResponse(
         status_code=400,  # Mã lỗi 400 cho request không hợp lệ
-        content=jsonable_encoder(ResponseSchemaBase().custom_response('400', get_validation_message(exc)))
+        content=jsonable_encoder(ResponseSchemaBase().custom_response('400',
+                                                                      "VALIDATION_ERROR",
+                                                                      get_validation_message(exc)))
         # Chuyển thành JSON
     )
 
@@ -69,7 +81,7 @@ async def fastapi_error_handler(request, exc):
     return JSONResponse(
         status_code=500,  # Mã lỗi 500 cho lỗi hệ thống
         content=jsonable_encoder(
-            ResponseSchemaBase().custom_response('500', "An error occurred, please contact admin!"))  # Thông báo lỗi
+            ResponseSchemaBase().custom_response('500','SERVER_ERROR', "An error occurred, please contact admin!"))  # Thông báo lỗi
     )
 
 

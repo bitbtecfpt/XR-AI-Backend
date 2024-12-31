@@ -35,6 +35,8 @@ class InterviewScript(Base):
     JD_file = Column(String(255), nullable=True)
     CV_file = Column(String(255), nullable=True)
     script = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=func.now())
+    deleted_at = Column(DateTime)
 
     # Relationship
     user = relationship("User", back_populates="interview_scripts")

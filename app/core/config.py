@@ -14,6 +14,10 @@ class Settings(BaseSettings):
     PASSWORD_DB: str = os.getenv('PASSWORD_DB', '')
     HOST_DB: str = os.getenv('HOST_DB', '')
     NAME_DB: str = os.getenv('NAME_DB', '')
+    JWT_ALGORITHM: str = os.getenv('JWT_ALGORITHM', '')
+    JWT_SECRET_KEY: str = os.getenv('JWT_SECRET_KEY', '')
+    EMAIL_PASSWORD: str = os.getenv('EMAIL_PASSWORD', '')
+    EMAIL_USER: str = os.getenv('EMAIL_USER', '')
     USERNAME_DB: str = os.getenv('USERNAME_DB', '')
     PORT_DB: str = os.getenv('PORT_DB', '')
     BACKEND_CORS_ORIGINS: List[str] = ['*']  # List of origins
