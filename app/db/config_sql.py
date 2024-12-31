@@ -10,6 +10,13 @@ DATABASE_URL = (f"postgresql+psycopg2://{settings.USERNAME_DB}:"
 # Tạo engine
 engine = create_engine(DATABASE_URL, echo=True)
 
-
 # Tạo Session để giao tiếp với database
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

@@ -62,7 +62,8 @@ Here is the basic directory structure of the project:
 │   ├── api         # Contains all the API endpoints and routes  
 │   ├── core        # Contains core configuration files, including environment variable loading and JWT handling  
 │   ├── helpers     # Utility functions such as login manager, pagination logic  
-│   ├── models      # Database models, integrated with Alembic for automatic migrations  
+│   ├── models      # Database models, integrated with Alembic for automatic migrations
+│   ├── repositories  # Data access layer for interacting with the database  
 │   ├── schemas     # Pydantic schemas for request and response validation  
 │   ├── services    # CRUD operations and database interaction logic  
 │   └── main.py     # Main entry point for configuring and running the application  
